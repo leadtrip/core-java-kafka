@@ -1,0 +1,21 @@
+// Applying plugins is simpler in Groovy
+apply plugin: 'application'
+
+// Configure the main class for the 'run' task
+application {
+    // Assuming your main class is SimpleProducer in the root package
+    mainClass = 'SimpleProducer'
+}
+
+// Add any producer-specific dependencies here if needed
+dependencies {
+    // Dependencies are inherited from the root
+}
+
+jar {
+    manifest {
+        // Groovy map syntax for attributes
+        attributes 'Main-Class': application.mainClass
+    }
+    archiveBaseName = 'kafka-producer'
+}
