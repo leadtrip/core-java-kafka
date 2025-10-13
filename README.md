@@ -3,15 +3,9 @@
 Start kafka:\
 `docker compose up -d`
 
-Create topics:\
+Create topics (probably not needed as auto.create.topics.enable defaults to true with docker image):\
 `docker exec broker /opt/kafka/bin/kafka-topics.sh --create --topic simple-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1`
 `docker exec broker /opt/kafka/bin/kafka-topics.sh --create --topic product-events-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1`
 
-Verify topic has been created:\
-`docker exec broker /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092`
-
-Start the consumer:\
-`./gradlew :consumer-app:run`
-
-Start the producer:\
-`./gradlew :producer-app:run`
+There's a producer and consumer for each example in the relevant producer and consumer modules.\
+Each has a main method, just start the consumer first then the producer, there'll be some sort of log output.
