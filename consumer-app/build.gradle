@@ -8,6 +8,7 @@ application {
 }
 
 dependencies {
+    implementation project(':common')
     // Dependencies are inherited from the root
 }
 

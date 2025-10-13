@@ -1,0 +1,65 @@
+package wood.mike;
+
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import wood.mike.util.Config;
+
+import java.time.Duration;
+import java.util.Collections;
+import java.util.Properties;
+
+import static wood.mike.util.Config.PRODUCT_EVENTS_TOPIC;
+
+
+public class ProductConsumer {
+
+    public static void main(String[] args) {
+        System.out.println("Starting Kafka Product Consumer...");
+
+        // 1. Create Consumer Properties
+        Properties props = getProperties();
+
+
+        // 2. Create the Consumer (Note the Product type argument)
+        try (KafkaConsumer<String, Product> consumer = new KafkaConsumer<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(Product.class))) {
+
+            // 3. Subscribe to the topic(s)
+            consumer.subscribe(Collections.singletonList(PRODUCT_EVENTS_TOPIC));
+
+            System.out.println("Subscribed to topic " + PRODUCT_EVENTS_TOPIC + ". Waiting for product events...");
+
+            // 4. Start the polling loop
+            while (true) {
+                ConsumerRecords<String, Product> records = consumer.poll(Duration.ofMillis(100));
+
+                for (ConsumerRecord<String, Product> record : records) {
+                    Product product = record.value();
+                    if (product != null) {
+                        System.out.printf("Consumed Product Event: ID=%s, Name='%s', Price=%.2f, Stock=%d%n",
+                                product.id(), product.name(), product.price(), product.stockQuantity());
+                    } else {
+                        System.err.println("Consumed null record (deserialization failure or null value).");
+                    }
+                }
+                if (!records.isEmpty()) {
+                    consumer.commitSync();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Consumer interrupted or encountered an error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static Properties getProperties() {
+        Properties properties = Config.commonProperties();
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        return properties;
+    }
+}

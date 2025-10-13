@@ -2,3 +2,4 @@ rootProject.name = 'core-java-kafka'
 
 include("producer-app")
 include("consumer-app")
+include("common")

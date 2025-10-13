@@ -4,10 +4,13 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import wood.mike.util.Config;
 
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
+
+import static wood.mike.util.Config.SIMPLE_TOPIC;
 
 public class SimpleConsumer {
 
@@ -16,10 +19,8 @@ public class SimpleConsumer {
 
         try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties)) {
 
-            String topic = "random-topic";
-
-            consumer.subscribe(Collections.singletonList(topic));
-            System.out.println("Consumer subscribed to topic: " + topic + ". Polling for records...");
+            consumer.subscribe(Collections.singletonList(SIMPLE_TOPIC));
+            System.out.println("Consumer subscribed to topic: " + SIMPLE_TOPIC + ". Polling for records...");
 
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
@@ -31,8 +32,6 @@ public class SimpleConsumer {
                             + ", Offset=" + record.offset());
                 });
 
-                // Optional: manually commit offsets (auto-commit is default, but manual is better practice)
-                // consumer.commitSync();
             }
         } catch (Exception e) {
             System.err.println("Consumer encountered an exception: " + e.getMessage());
@@ -40,13 +39,8 @@ public class SimpleConsumer {
     }
 
     private static Properties getProperties() {
-        Properties properties = new Properties();
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        Properties properties = Config.commonProperties();
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-
-        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "my-java-consumer-group");
-        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return properties;
     }
 }

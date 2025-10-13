@@ -9,6 +9,7 @@ application {
 
 // Add any producer-specific dependencies here if needed
 dependencies {
+    implementation project(':common')
     // Dependencies are inherited from the root
 }
 
