@@ -19,22 +19,17 @@ public class ProductConsumer {
     public static void main(String[] args) {
         System.out.println("Starting Kafka Product Consumer...");
 
-        // 1. Create Consumer Properties
         Properties props = getProperties();
 
-
-        // 2. Create the Consumer (Note the Product type argument)
         try (KafkaConsumer<String, Product> consumer = new KafkaConsumer<>(
                 props,
                 new StringDeserializer(),
                 new JsonDeserializer<>(Product.class))) {
 
-            // 3. Subscribe to the topic(s)
             consumer.subscribe(Collections.singletonList(PRODUCT_EVENTS_TOPIC));
 
             System.out.println("Subscribed to topic " + PRODUCT_EVENTS_TOPIC + ". Waiting for product events...");
 
-            // 4. Start the polling loop
             while (true) {
                 ConsumerRecords<String, Product> records = consumer.poll(Duration.ofMillis(100));
 

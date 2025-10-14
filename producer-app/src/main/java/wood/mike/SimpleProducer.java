@@ -18,7 +18,7 @@ public class SimpleProducer {
 
             for (int i = 0; i < 10; i++) {
                 String key = "id_" + i;
-                String value = "hello world " + i;
+                String value = "ST-" + i;
 
                 ProducerRecord<String, String> record = new ProducerRecord<>(SIMPLE_TOPIC, key, value);
 
