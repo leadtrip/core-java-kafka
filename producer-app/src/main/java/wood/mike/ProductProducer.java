@@ -56,6 +56,7 @@ public class ProductProducer {
     private static Properties getProperties() {
         Properties properties = Config.commonProperties();
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
+        properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
         return properties;
     }
 }
