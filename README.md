@@ -12,7 +12,7 @@ Each has a main method, just start the consumer first then the producer, there'l
 
 The Product domain based example is the most fleshed out including streams.
 
-From IntelliJ run the `Start all Product domain apps` run config then view the output from the apps as they produce and consume Products. 
+From IntelliJ, run `Start all Product domain apps` and view the output from the apps in the console as they produce and consume Products. 
 
 ### Useful queries
 List all topics:\
