@@ -24,7 +24,6 @@ public class ClusterMetadataFetcher {
     public static void main(String[] args) {
         System.out.println("Starting Kafka Cluster Metadata Fetcher...");
 
-        // 1. Configure AdminClient Properties
         Properties props = new Properties();
         props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 

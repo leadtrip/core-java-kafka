@@ -9,9 +9,15 @@ import java.util.Properties;
 
 public class Config {
 
-    public static final String SIMPLE_TOPIC = "simple-topic";
-    public static final String PRODUCT_EVENTS_TOPIC = "product-events-topic";
     public static final String BOOTSTRAP_SERVERS = "localhost:9092";
+    public static final String APPLICATION_ID = "core-java-kafka";
+    public static final String CATEGORY_PREFIX = "CAT-";
+
+    public static final String SIMPLE_TOPIC = "simple-topic";
+    public static final String PRODUCT_EVENTS_TOPIC = "product-events";
+    public static final String LOW_STOCK_RAW_TOPIC = "low-stock-raw";
+    public static final String PRODUCT_METADATA_TOPIC = "product-metadata";
+    public static final String ENRICHED_LOW_STOCK_ALERTS_TOPIC = "enriched-low-stock-alerts";
 
     private Config() {}
 

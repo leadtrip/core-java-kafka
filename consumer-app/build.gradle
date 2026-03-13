@@ -1,20 +1,17 @@
-// Applying plugins is simpler in Groovy
 apply plugin: 'application'
 
-// Configure the main class for the 'run' task
 application {
-    // Assuming your main class is SimpleConsumer in the root package
     mainClass = 'SimpleConsumer'
 }
 
 dependencies {
     implementation project(':common')
-    // Dependencies are inherited from the root
+    implementation "org.apache.kafka:kafka-streams:${rootProject.ext.kafkaVersion}"
+    implementation("tools.jackson.core:jackson-databind:3.1.0")
 }
 
 jar {
     manifest {
-        // Groovy map syntax for attributes
         attributes 'Main-Class': application.mainClass
     }
     archiveBaseName = 'kafka-consumer'

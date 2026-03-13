@@ -12,13 +12,11 @@ public class JsonSerializer<T> implements Serializer<T> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Default constructor is required by Kafka for reflection
     public JsonSerializer() {}
 
-    // Required override methods from the Serializer interface
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
-        // Can be used to configure the Jackson ObjectMapper
+
     }
 
     @Override

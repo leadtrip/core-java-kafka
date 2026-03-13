@@ -15,11 +15,9 @@ public class JsonDeserializer<T> implements Deserializer<T> {
 
     @SuppressWarnings("unchecked")
     public JsonDeserializer() {
-        // Dummy initialization to satisfy Kafka's reflection requirement.
         this.targetClass = (Class<T>) Object.class;
     }
 
-    // Required constructor for manual instantiation (used in the consumer)
     public JsonDeserializer(Class<T> targetClass) {
         this.targetClass = targetClass;
     }

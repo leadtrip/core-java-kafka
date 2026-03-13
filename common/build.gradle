@@ -1,9 +1,7 @@
 plugins {
-    // We use the java-library plugin for modules that export classes to other modules
     id 'java-library'
 }
 
-// Inherit version and source compatibility from the root project
 java {
     sourceCompatibility = project.rootProject.ext.javaVersion
     targetCompatibility = project.rootProject.ext.javaVersion
@@ -14,9 +12,6 @@ repositories {
 }
 
 dependencies {
-    // 1. Jackson Databind (Provides ObjectMapper)
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
-
-    // 2. Kafka Clients (Provides org.apache.kafka.common.serialization.Deserializer)
     implementation "org.apache.kafka:kafka-clients:${project.rootProject.ext.kafkaVersion}"
 }

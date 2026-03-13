@@ -1,34 +1,28 @@
 ext {
-    kafkaVersion = '3.7.0'
+    kafkaVersion = '4.2.0'
     slf4jVersion = '2.0.12'
     javaVersion = 21
 }
 
 subprojects {
-    // Apply common plugins
     apply plugin: 'java'
     apply plugin: 'application'
 
-    // Configure the Java toolchain for all subprojects
     java {
         toolchain {
-            // Accessing the property from the root project's ext block
             languageVersion = JavaLanguageVersion.of(rootProject.ext.javaVersion)
         }
     }
 
-    // Set the source and target compatibility (Groovy syntax)
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }
 
-    // Define common repositories
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        // Groovy string interpolation to access the properties
         implementation "org.apache.kafka:kafka-clients:${rootProject.ext.kafkaVersion}"
         implementation "org.slf4j:slf4j-simple:${rootProject.ext.slf4jVersion}"
     }

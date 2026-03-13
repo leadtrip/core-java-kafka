@@ -9,6 +9,8 @@ import wood.mike.util.Config;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
+import static wood.mike.util.Config.CATEGORY_PREFIX;
+
 /**
  * Demonstrates using a Custom Partitioner to control message routing and
  * adding Headers for metadata and traceability.
@@ -55,7 +57,8 @@ public class CustomPartitionerProducer {
                 productId,
                 "Widget " + i,
                 100.00 + (i * 10),
-                50 + i
+                50 + i,
+                CATEGORY_PREFIX + "1"
         );
 
         return new ProducerRecord<>(

@@ -39,7 +39,6 @@ public class MetadataConsumer {
                     System.out.printf("  Product: ID=%s, Name='%s', Price=%.2f%n",
                             record.value().id(), record.value().name(), record.value().price());
 
-                    // *** CRUCIAL: Read and process Headers ***
                     System.out.print("  Headers: [");
                     for (Header header : record.headers()) {
                         String value = new String(header.value(), StandardCharsets.UTF_8);
