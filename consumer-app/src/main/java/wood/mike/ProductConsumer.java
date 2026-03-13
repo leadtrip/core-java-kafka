@@ -18,7 +18,10 @@ public class ProductConsumer {
 
     public static void main(String[] args) {
         System.out.println("Starting Kafka Product Consumer...");
+        new ProductConsumer().run();
+    }
 
+    private void run() {
         Properties props = getProperties();
 
         try (KafkaConsumer<String, Product> consumer = new KafkaConsumer<>(
@@ -52,7 +55,7 @@ public class ProductConsumer {
         }
     }
 
-    private static Properties getProperties() {
+    private Properties getProperties() {
         Properties properties = Config.commonProperties();
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         return properties;

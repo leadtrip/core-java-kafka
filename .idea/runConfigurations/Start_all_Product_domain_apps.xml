@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Start all Product domain apps" type="CompoundRunConfigurationType">
+    <toRun name="ProductConsumer" type="Application" />
+    <toRun name="ProductMetadataProducer" type="Application" />
+    <toRun name="ProductProducer" type="Application" />
+    <toRun name="ProductStreamProcessor" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>

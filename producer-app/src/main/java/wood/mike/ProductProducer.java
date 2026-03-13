@@ -13,9 +13,10 @@ import static wood.mike.util.Config.PRODUCT_EVENTS_TOPIC;
 
 public class ProductProducer {
 
-    // deliberately make this larger than the number of ProductMetadata records
-    // added (50) so we see the left join working in the ProductStreamProcessor
+    // deliberately make the total categories larger than the number of ProductMetadata records added (50)
+    // this will ensure we create products with no matching category, and we will see the left join working in the ProductStreamProcessor
     private static final int TOTAL_CATEGORIES = 100;
+    private static final int TOTAL_PRODUCTS = 100;
 
     public static void main(String[] args) {
         System.out.println("Starting Kafka Product Producer...");
@@ -29,13 +30,15 @@ public class ProductProducer {
 
         try (KafkaProducer<String, Product> producer = new KafkaProducer<>(props)) {
 
-            for (int i = 0; i < 100; i++) {
-                sendProduct(producer, Product.of(
+            for (int i = 0; i < TOTAL_PRODUCTS; i++) {
+                sendProduct(producer,
+                        Product.of(
                         String.valueOf(i),
                         "product-"+i,
-                        i,
+                        random.nextLong(400),
                         random.nextInt(200),
-                        CATEGORY_PREFIX + random.nextInt(TOTAL_CATEGORIES)));
+                        CATEGORY_PREFIX + random.nextInt(TOTAL_CATEGORIES)
+                ));
                 Thread.sleep(random.nextInt(1000));
             }
 
@@ -53,8 +56,8 @@ public class ProductProducer {
 
         producer.send(record, (metadata, exception) -> {
             if (exception == null) {
-                System.out.printf("Sent Product: ID=%s, Name=%s, Quantity=%d%n",
-                        product.id(), product.name(), product.stockQuantity());
+                System.out.printf("Sent Product: ID=%s, Name=%s, Price=%.2f, Quantity=%d%n",
+                        product.id(), product.name(), product.price(), product.stockQuantity());
             } else {
                 System.err.println("Error sending product: " + exception.getMessage());
                 exception.printStackTrace();
@@ -66,6 +69,8 @@ public class ProductProducer {
         Properties properties = Config.commonProperties();
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
         properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, 0);
+        properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 1);
         return properties;
     }
 }

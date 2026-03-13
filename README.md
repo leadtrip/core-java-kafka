@@ -5,10 +5,14 @@ Start kafka:\
 
 There's a producer and consumer for each example in the relevant producer and consumer modules.\
 `SimpleProducer` -> `SimpleConsumer`\
-`ProductProducer` -> `ProductConsumer` -> `ProductStreamProcessor`\
+`ProductProducer` & `ProductMetadataProducer` -> `ProductConsumer` -> `ProductStreamProcessor`\
 `CustomPartitionerProducer` -> `MetadataConsumer`
 
 Each has a main method, just start the consumer first then the producer, there'll be some sort of log output.
+
+The Product domain based example is the most fleshed out including streams.
+
+From IntelliJ run the `Start all Product domain apps` run config then view the output from the apps as they produce and consume Products. 
 
 ### Useful queries
 List all topics:\
