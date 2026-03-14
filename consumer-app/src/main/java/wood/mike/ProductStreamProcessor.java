@@ -60,20 +60,21 @@ public class ProductStreamProcessor {
         var productSerde = buildJsonSerde(Product.class);
         var metaSerde = buildJsonSerde(ProductMetadata.class);
         var alertSerde = buildJsonSerde(EnrichedLowStockAlert.class);
+        var stringSerde = Serdes.String();
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        builder.stream(PRODUCT_EVENTS_TOPIC, Consumed.with(Serdes.String(), productSerde))
+        builder.stream(PRODUCT_EVENTS_TOPIC, Consumed.with(stringSerde, productSerde))
                 .filter((key, product) -> product.stockQuantity() < LOW_STOCK_THRESHOLD)
                 .peek((k, v) -> System.out.printf("Low stock product id:%s, category:%s, quantity:%d%n", v.id(), v.categoryId(), v.stockQuantity()))
-                .to(LOW_STOCK_RAW_TOPIC, Produced.with(Serdes.String(), productSerde));
+                .to(LOW_STOCK_RAW_TOPIC, Produced.with(stringSerde, productSerde));
 
         GlobalKTable<String, ProductMetadata> metadataTable = builder.globalTable(
                 PRODUCT_METADATA_TOPIC,
-                Consumed.with(Serdes.String(), metaSerde)
+                Consumed.with(stringSerde, metaSerde)
         );
 
-        builder.stream(LOW_STOCK_RAW_TOPIC, Consumed.with(Serdes.String(), productSerde))
+        builder.stream(LOW_STOCK_RAW_TOPIC, Consumed.with(stringSerde, productSerde))
                 .leftJoin(
                     metadataTable,
                     (productId, product) -> product.categoryId(),   // the join expressed by, Product->categoryId -> (key)ProductMetadata
@@ -85,7 +86,7 @@ public class ProductStreamProcessor {
                     }
                 )
                 .peek((key, alert) -> System.out.println(alert))
-                .to(ENRICHED_LOW_STOCK_ALERTS_TOPIC, Produced.with(Serdes.String(), alertSerde));
+                .to(ENRICHED_LOW_STOCK_ALERTS_TOPIC, Produced.with(stringSerde, alertSerde));
         return builder.build();
     }
 
