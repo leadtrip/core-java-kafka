@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ProductConsumer" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="wood.mike.ProductConsumer" />
+    <option name="MAIN_CLASS_NAME" value="wood.mike.product.ProductConsumer" />
     <module name="core-java-kafka.consumer-app.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="wood.mike.*" />
+        <option name="PATTERN" value="wood.mike.gps.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -1,4 +1,4 @@
-package wood.mike;
+package wood.mike.product;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -11,6 +11,8 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.Produced;
+import wood.mike.JsonDeserializer;
+import wood.mike.JsonSerializer;
 
 import java.util.List;
 import java.util.Properties;

@@ -1,10 +1,11 @@
-package wood.mike;
+package wood.mike.product;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import wood.mike.JsonDeserializer;
 import wood.mike.util.Config;
 
 import java.time.Duration;

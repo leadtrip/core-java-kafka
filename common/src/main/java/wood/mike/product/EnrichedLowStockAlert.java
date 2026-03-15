@@ -1,4 +1,4 @@
-package wood.mike;
+package wood.mike.product;
 
 public record EnrichedLowStockAlert(
         String productId,

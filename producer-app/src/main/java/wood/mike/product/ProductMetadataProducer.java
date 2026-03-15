@@ -1,8 +1,9 @@
-package wood.mike;
+package wood.mike.product;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import wood.mike.JsonSerializer;
 import wood.mike.util.Config;
 
 import java.util.List;

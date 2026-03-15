@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ProductMetadataProducer" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="wood.mike.ProductMetadataProducer" />
+    <option name="MAIN_CLASS_NAME" value="wood.mike.product.ProductMetadataProducer" />
     <module name="core-java-kafka.producer-app.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="wood.mike.*" />
+        <option name="PATTERN" value="wood.mike.gps.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

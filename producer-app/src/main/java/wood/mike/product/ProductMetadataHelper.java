@@ -1,4 +1,4 @@
-package wood.mike;
+package wood.mike.product;
 
 import java.util.ArrayList;
 import java.util.List;
