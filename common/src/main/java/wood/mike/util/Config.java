@@ -22,6 +22,8 @@ public class Config {
     public static final String SEGMENTS_TOPIC = "segments";
     public static final String SEGMENTS_STORE = "segments-store";
     public static final String ACTIVE_RUNS = "active-runs";
+    public static final String COMPLETED_SEGMENTS_TOPIC = "completed-segments";
+    public static final String GLOBAL_LEADERBOARD_STORE = "global-leaderboard-store";
 
     private Config() {}
 

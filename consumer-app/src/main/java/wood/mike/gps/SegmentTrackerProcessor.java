@@ -14,17 +14,16 @@ import java.time.format.DateTimeFormatter;
 
 import static wood.mike.util.Config.*;
 
-class SegmentTrackerProcessor implements Processor<String, GpsPoint, String, String> {
+class SegmentTrackerProcessor implements Processor<String, GpsPoint, String, SegmentCompletion> {
     private KeyValueStore<String, Long> runStore;
     private ReadOnlyKeyValueStore<String, ValueAndTimestamp<Segment>> segmentsStore;
-    private ProcessorContext<String, String> context;
+    private ProcessorContext<String, SegmentCompletion> context;
 
     private static final double SEGMENT_PROXIMITY_THRESHOLD_METERS = 15.0;
 
     @Override
-    public void init(ProcessorContext<String, String> context) {
+    public void init(ProcessorContext<String, SegmentCompletion> context) {
         this.context = context;
-        // Connect to our "Notebook" and our "Map"
         this.runStore = context.getStateStore(ACTIVE_RUNS);
         this.segmentsStore = context.getStateStore(SEGMENTS_STORE);
     }
@@ -39,21 +38,21 @@ class SegmentTrackerProcessor implements Processor<String, GpsPoint, String, Str
             Segment seg = entry.value.value();
             String runKey = userId + "_" + seg.segmentId();
 
-            // STEP A: Check for START
+            // Check for START
             if (GpsUtils.isWithinDistance(point.lat(), point.lon(), seg.startLat(), seg.startLon(), SEGMENT_PROXIMITY_THRESHOLD_METERS)) {
                 Long existingStart = runStore.get(runKey);
 
-                // We only log/record if:
+                // only log/record if:
                 // 1. It's the first time we've seen a start (null)
                 // OR
-                // 2. The point we just got is EARLIER than what's in the book (Fixes the replay/ghost issue)
+                // 2. The point we just got is EARLIER than what's in the book, covers going over a segment start the 'wrong' way
                 if (existingStart == null || point.timestamp() < existingStart) {
                     runStore.put(runKey, point.timestamp());
                     System.out.println(">>> START: " + time(point.timestamp()) + " " + userId + " entered " + seg.segmentId());
                 }
             }
 
-            // STEP B: Check for FINISH
+            // Check for FINISH
             else if (GpsUtils.isWithinDistance(point.lat(), point.lon(), seg.endLat(), seg.endLon(), SEGMENT_PROXIMITY_THRESHOLD_METERS)) {
                 Long startTime = runStore.get(runKey);
                 if (startTime != null) {
@@ -61,7 +60,7 @@ class SegmentTrackerProcessor implements Processor<String, GpsPoint, String, Str
                     runStore.delete(runKey); // Clear the notebook for next time
 
                     // Send the result to the next topic
-                    context.forward(new Record<>(userId, "Finished " + seg.segmentId() + " in " + (duration/1000) + "s", point.timestamp()));
+                    context.forward(new Record<>(seg.segmentId(), new SegmentCompletion(seg.segmentId(), userId, duration, point.timestamp()), point.timestamp()));
                     System.out.println("<<< FINISH: " + time(point.timestamp()) + " " + userId + " completed " + seg.segmentId() + " in " + (duration/1000) + "s");
                 }
             }

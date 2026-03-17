@@ -6,8 +6,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
@@ -22,7 +21,8 @@ import static wood.mike.util.KafkaHelper.ensureTopicsExists;
 
 public class GpsStreamProcessor {
 
-    private static final List<String> REQUIRED_TOPICS = Arrays.asList(GPS_RAW_TOPIC, SEGMENTS_TOPIC, ACTIVE_RUNS);
+    private static final List<String> REQUIRED_TOPICS =
+            Arrays.asList(GPS_RAW_TOPIC, SEGMENTS_TOPIC, ACTIVE_RUNS, COMPLETED_SEGMENTS_TOPIC);
 
     public static void main(String[] args) {
         new GpsStreamProcessor().run();
@@ -48,6 +48,7 @@ public class GpsStreamProcessor {
     private Topology buildTopology() {
         var gpsSerde = buildJsonSerde(GpsPoint.class);
         var segmentSerde = buildJsonSerde(Segment.class);
+        var completedSegmentsSerde = buildJsonSerde(SegmentCompletion.class);
         var stringSerde = Serdes.String();
 
         StreamsBuilder builder = new StreamsBuilder();
@@ -72,8 +73,21 @@ public class GpsStreamProcessor {
         builder.addStateStore(activeRunsStore);
 
         builder.stream(GPS_RAW_TOPIC, Consumed.with(stringSerde, gpsSerde))
-                .process(SegmentTrackerProcessor::new, ACTIVE_RUNS);
+                .process(SegmentTrackerProcessor::new, ACTIVE_RUNS)
+                .to(COMPLETED_SEGMENTS_TOPIC, Produced.with(stringSerde, completedSegmentsSerde));
 
+        KStream<String, SegmentCompletion> completionStream  = builder.stream(COMPLETED_SEGMENTS_TOPIC, Consumed.with(stringSerde, completedSegmentsSerde))
+                .peek((key, value) -> System.out.println("Completed: " + value));
+
+        builder.stream(COMPLETED_SEGMENTS_TOPIC, Consumed.with(stringSerde, completedSegmentsSerde))
+                .groupByKey()
+                .reduce((currentFastest, newCompletion) -> {
+                    return (newCompletion.duration() < currentFastest.duration())
+                            ? newCompletion
+                            : currentFastest;
+                }, Materialized.as(GLOBAL_LEADERBOARD_STORE))
+                .toStream()
+                .print(Printed.<String, SegmentCompletion>toSysOut().withLabel("GLOBAL-RECORD"));
 
         return builder.build();
     }
