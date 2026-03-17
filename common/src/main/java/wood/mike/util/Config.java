@@ -18,6 +18,10 @@ public class Config {
     public static final String LOW_STOCK_RAW_TOPIC = "low-stock-raw";
     public static final String PRODUCT_METADATA_TOPIC = "product-metadata";
     public static final String ENRICHED_LOW_STOCK_ALERTS_TOPIC = "enriched-low-stock-alerts";
+    public static final String GPS_RAW_TOPIC = "gps-raw-data";
+    public static final String SEGMENTS_TOPIC = "segments";
+    public static final String SEGMENTS_STORE = "segments-store";
+    public static final String ACTIVE_RUNS = "active-runs";
 
     private Config() {}
 

@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import static wood.mike.SerdeUtils.buildJsonSerde;
 import static wood.mike.util.Config.*;
+import static wood.mike.util.KafkaHelper.ensureTopicsExists;
 
 public class ProductStreamProcessor {
 
@@ -92,9 +94,7 @@ public class ProductStreamProcessor {
         return builder.build();
     }
 
-    private <T> Serde<T> buildJsonSerde(Class<T> clazz) {
-        return Serdes.serdeFrom(new JsonSerializer<>(), new JsonDeserializer<>(clazz));
-    }
+
 
     private Properties getProperties() {
         Properties properties = commonProperties();
@@ -103,20 +103,5 @@ public class ProductStreamProcessor {
         return properties;
     }
 
-    public void ensureTopicsExists(Properties props, List<String> topicNames) {
-        try (AdminClient adminClient = AdminClient.create(props)) {
-            Set<String> existingTopics = adminClient.listTopics().names().get();
 
-            List<NewTopic> newTopics = topicNames.stream()
-                    .filter(topicName -> !existingTopics.contains(topicName))
-                    .map(topicName -> {
-                        System.out.println("Topic " + topicName + " missing. Creating it...");
-                        return new NewTopic(topicName, 1, (short) 1);
-                    }).toList();
-
-            adminClient.createTopics(newTopics).all().get();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to ensure topic exists", e);
-        }
-    }
 }

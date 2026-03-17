@@ -6,19 +6,18 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import wood.mike.JsonSerializer;
 import wood.mike.util.Config;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 
 import static java.lang.Thread.sleep;
+import static wood.mike.util.Config.GPS_RAW_TOPIC;
 
-public class GpxProducer {
+public class GpsProducer {
 
-    public static final String GPS_RAW_TOPIC = "gps-raw-data";
     public static final String USER_ID = "mikew";
 
     public static void main(String[] args) {
-        new GpxProducer().run();
+        new GpsProducer().run();
     }
 
     private void run(){
@@ -44,10 +43,11 @@ public class GpxProducer {
             System.out.println("Sending: " + current);
             producer.send(new ProducerRecord<>(GPS_RAW_TOPIC, current.userId(), current));
 
-            if (i < points.size() - 1) {
+            // uncomment to produce realistic GPS point timestamps
+            /*if (i < points.size() - 1) {
                 long waitTime = points.get(i + 1).timestamp() - current.timestamp();
                 sleep(waitTime);
-            }
+            }*/
         }
     }
 
