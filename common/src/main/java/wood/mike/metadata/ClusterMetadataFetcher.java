@@ -1,4 +1,4 @@
-package wood.mike;
+package wood.mike.metadata;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;

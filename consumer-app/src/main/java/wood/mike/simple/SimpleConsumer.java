@@ -1,11 +1,13 @@
-package wood.mike;
+package wood.mike.simple;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import wood.mike.util.Config;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
@@ -30,6 +32,13 @@ public class SimpleConsumer {
                             + ", Value=" + record.value()
                             + ", Partition=" + record.partition()
                             + ", Offset=" + record.offset());
+
+                    System.out.print("  Headers: [");
+                    for (Header header : record.headers()) {
+                        String value = new String(header.value(), StandardCharsets.UTF_8);
+                        System.out.printf("%s=%s, ", header.key(), value);
+                    }
+                    System.out.println("]");
                 });
 
             }

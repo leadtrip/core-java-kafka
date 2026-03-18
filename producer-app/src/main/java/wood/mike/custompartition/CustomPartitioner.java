@@ -1,4 +1,4 @@
-package wood.mike;
+package wood.mike.custompartition;
 
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;

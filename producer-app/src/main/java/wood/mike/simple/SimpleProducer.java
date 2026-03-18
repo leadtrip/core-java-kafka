@@ -1,4 +1,4 @@
-package wood.mike;
+package wood.mike.simple;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;

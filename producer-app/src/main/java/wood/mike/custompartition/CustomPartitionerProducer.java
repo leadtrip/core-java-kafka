@@ -1,9 +1,10 @@
-package wood.mike;
+package wood.mike.custompartition;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
+import wood.mike.JsonSerializer;
 import wood.mike.product.Product;
 import wood.mike.util.Config;
 
