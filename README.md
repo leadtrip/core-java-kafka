@@ -3,7 +3,9 @@
 Start kafka:\
 `docker compose up -d`
 
-### Product
+# Apps
+This project contains the following apps, typcially consisting of a producer, a vanilla consumer and sometimes a streaming consumer.
+## Product
 This project simulates product sales/events in a retail environment.
 
 The `ProductProducer` generates `Product` records with name, price, stock quantity and category id fields.
@@ -15,7 +17,7 @@ Run these classes:
 * `ProductStreamProcessor`
 * `ProductProducer`
 
-### GPS
+## GPS
 This project started off with the idea of simply capturing GPS point events generated from a GPS
 device. Additional features were added such as pre-defined segments on a given course and figuring
 out when these segments had been entered, capturing the time taken to complete the segment and
@@ -36,7 +38,7 @@ Run these classes:
 * `GpsStreamProcessor`
 * `GpsProducer`
 
-### Simple
+## Simple
 The `SimpleProducer` generates a record with a String key and value, the `SimpleConsumer` consumes
 the records, printing the key, value and partition details.
 
@@ -44,7 +46,7 @@ Run these classes:
 * `SimpleConsumer`
 * `SimpleProducer`
 
-### Custom partition
+## Custom partition
 The `CustomPartitionerProducer` generates `Product` records and uses the `CustomPartioner`
 that routes messages based on the hash of the key.
 
@@ -52,7 +54,7 @@ Run these classes:
 * `ProductConsumer`
 * `CustomPartitionerProducer`
 
-### Metadata
+## Metadata
 The `ClusterMetadataFetcher` makes use of Kafka's `AdminClient` extracting and printing various
 cluster, node etc. information.
 
