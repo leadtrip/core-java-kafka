@@ -64,7 +64,7 @@ public class GpsStreamProcessor {
                 materialized
         );
 
-        // Temporary memory to store active runs - Key: UserID_SegmentID | Value: StartTime (Long)
+        // Temporary memory to store active run info, required to determine segment time start - Key: UserID_SegmentID | Value: StartTime (Long)
         StoreBuilder<KeyValueStore<String, Long>> activeRunsStore = Stores.keyValueStoreBuilder(
                 Stores.persistentKeyValueStore(ACTIVE_RUNS),
                 stringSerde,
@@ -76,7 +76,7 @@ public class GpsStreamProcessor {
                 .process(SegmentTrackerProcessor::new, ACTIVE_RUNS)
                 .to(COMPLETED_SEGMENTS_TOPIC, Produced.with(stringSerde, completedSegmentsSerde));
 
-        KStream<String, SegmentCompletion> completionStream  = builder.stream(COMPLETED_SEGMENTS_TOPIC, Consumed.with(stringSerde, completedSegmentsSerde))
+        builder.stream(COMPLETED_SEGMENTS_TOPIC, Consumed.with(stringSerde, completedSegmentsSerde))
                 .peek((key, value) -> System.out.println("Completed: " + value));
 
         builder.stream(COMPLETED_SEGMENTS_TOPIC, Consumed.with(stringSerde, completedSegmentsSerde))

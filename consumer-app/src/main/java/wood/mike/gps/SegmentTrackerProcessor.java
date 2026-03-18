@@ -18,6 +18,7 @@ class SegmentTrackerProcessor implements Processor<String, GpsPoint, String, Seg
     private KeyValueStore<String, Long> runStore;
     private ReadOnlyKeyValueStore<String, ValueAndTimestamp<Segment>> segmentsStore;
     private ProcessorContext<String, SegmentCompletion> context;
+    private static final DateTimeFormatter HH_MM_SS = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     private static final double SEGMENT_PROXIMITY_THRESHOLD_METERS = 15.0;
 
@@ -68,6 +69,6 @@ class SegmentTrackerProcessor implements Processor<String, GpsPoint, String, Seg
     }
 
     private String time(long dts) {
-        return LocalTime.ofInstant(Instant.ofEpochMilli(dts), ZoneId.systemDefault()).format(DateTimeFormatter.ISO_TIME);
+        return LocalTime.ofInstant(Instant.ofEpochMilli(dts), ZoneId.systemDefault()).format(HH_MM_SS);
     }
 }
