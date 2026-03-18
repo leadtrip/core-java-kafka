@@ -29,6 +29,9 @@ segment start and end point event is implemented by a circular geofence calculat
 distance between the current GPS coordinate and the segment's anchor points.
 In addition, a global segment leaderboard is maintained.
 
+Additional runners are generated to simulate a race, their times are based around the original gpx
+file times with some variation.
+
 Run these classes:
 * `GpsStreamProcessor`
 * `GpsProducer`
