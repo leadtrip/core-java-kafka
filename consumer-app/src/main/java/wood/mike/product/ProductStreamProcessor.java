@@ -2,6 +2,7 @@ package wood.mike.product;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -98,6 +99,7 @@ public class ProductStreamProcessor {
 
     private Properties getProperties() {
         Properties properties = commonProperties();
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "product-stream-consumer");
         properties.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, APPLICATION_ID);
         properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 100);
         return properties;

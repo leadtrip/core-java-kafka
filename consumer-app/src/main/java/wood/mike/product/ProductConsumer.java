@@ -71,7 +71,7 @@ public class ProductConsumer {
 
     private Properties getProperties() {
         Properties properties = Config.commonProperties();
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "basic-product-consumer");
         return properties;
     }
 }
